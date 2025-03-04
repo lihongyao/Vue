@@ -60,7 +60,7 @@ $ pnpm create vite vue-tutorials --template vue-ts && cd vue-tutorials && pnpm i
 $ pnpm add -D @types/node
 ```
 
-> **`vite.config.js`**
+> **`vite.config.ts`**
 
 ```ts
 import type { UserConfig, ConfigEnv } from 'vite';

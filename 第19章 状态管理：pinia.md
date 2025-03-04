@@ -12,7 +12,7 @@ Pinia 是一个简单、灵活且类型安全的状态管理库，适用于Vue.j
 
 # 示例
 
-## 1. 创建项目
+## 创建项目
 
 ```shell
 $ npm create vite@latest pinia-examples -- --template vue-ts && cd pinia-examples && npm install && code .
@@ -20,7 +20,7 @@ $ npm install pinia
 $ mkdir -p src/stores && touch src/stores/index.ts
 ```
 
-## 2. 定义Store
+## 定义Store
 
 **`src/store/index.ts`**
 
@@ -58,7 +58,7 @@ export const useAppStore = defineStore('appStore', {
 });
 ```
 
-## 3. 导入Store
+## 导入Store
 
 **`main.ts`**
 
@@ -73,7 +73,7 @@ app.use(createPinia());
 app.mount('#app');
 ```
 
-## 4. 访问Store
+## 访问Store
 
 ```vue
 <script setup lang="ts">
@@ -88,7 +88,7 @@ const store = useAppStore();
 
 # 拓展
 
-## 1. Pinia vs. Vuex
+## Pinia vs. Vuex
 
 - pinia只有store、getter、action，mutations 不再存在，简化了状态管理的操作；
 - pinia模块划分不需要modules，
@@ -96,9 +96,9 @@ const store = useAppStore();
 - pinia对ts支持很好以及vue3的composition API
 - pinia体积更小，性能更好
 
-## 2. 持久化
+## 持久化
 
-### 2.1. 原生持久化
+### 原生持久化
 
 ```ts
 // 👉 持久化pinia
@@ -116,7 +116,7 @@ window.addEventListener('beforeunload', () => {
 });
 ```
 
-### 2.1. 插件持久化
+### 插件持久化
 
 ```shell
 $ npm i pinia-plugin-persist

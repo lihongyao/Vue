@@ -50,7 +50,7 @@ Vite 是一个面向现代浏览器的开发构建工具。它的目标是提供
 $ pnpm create vite vue-tutorials --template vue-ts && cd vue-tutorials && pnpm install && code .
 ```
 
-> **提示**：\<vue-tutorials> 为项目名称，该指令从 vut-ts 模板创建项目。
+> **提示**：\<vue-tutorials> 为项目名称，该指令从 vue-ts 模板创建项目。
 
 **配置 resolve.alias**
 
@@ -365,7 +365,7 @@ onMounted(() => {
 
 > 💡**提示**：**后续示例将默认使用 Composition API 进行讲解**，便于掌握更现代的 Vue 3 开发方式。
 
-# Vue2.x 🆚 Vue3.x
+# Vue2.x vs. Vue3.x
 
 |     对比项      | Vue 2.x                                                      | Vue 3.x                                              |
 | :-------------: | :----------------------------------------------------------- | ---------------------------------------------------- |

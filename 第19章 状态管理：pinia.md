@@ -1,8 +1,10 @@
 # 概述
 
-Pinia 是一个简单、灵活且类型安全的状态管理库，适用于Vue.js应用程序的状态管理。它提供了一种模块化的方法来组织和管理状态，并与Vue 3的Composition API无缝集成。无论是小型项目还是大型应用程序，Pinia都能提供良好的开发体验和可维护性。
+[Pinia >>](https://pinia.vuejs.org/zh/) 是 Vue 的专属状态管理库，它允许你跨组件或页面共享状态。
 
-关于 Pinia 的具体使用，建议直接参考 【[官方文档 >>](https://pinia.vuejs.org/zh/)】，这里只演示在实际开发中应该如何使用。
+相较于 Vuex，它更加简洁、轻量，并且天然支持 TypeScript。本文将介绍如何在 Vite + Vue 3 + TypeScript 项目中使用 Pinia，并结合组合式 API 来构建一个现代化的前端应用。
+
+> 💡**提示**：关于 Pinia 的具体使用，建议直接参考 【[官方文档 >>](https://pinia.vuejs.org/zh/)】，这里只演示在实际开发中应该如何使用。
 
 常用方法：
 
@@ -12,37 +14,52 @@ Pinia 是一个简单、灵活且类型安全的状态管理库，适用于Vue.j
 
 # 示例
 
-## 创建项目
+## 准备工作
 
 ```shell
-$ npm create vite@latest pinia-examples -- --template vue-ts && cd pinia-examples && npm install && code .
-$ npm install pinia
-$ mkdir -p src/stores && touch src/stores/index.ts
+# 创建项目
+$ pnpm create vite pinia-tutorials --template vue-ts && cd pinia-tutorials && pnpm install && code .
+# 安装 Pinia
+$ pnpm add pinia
+# 创建文件
+$ mkdir -p src/stores && touch src/stores/global.ts
 ```
 
-## 定义Store
+## 配置 Pinia
 
-**`src/store/index.ts`**
+在 **`src/main.ts`** 中引入并配置 Pinia：
+
+```ts
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+
+const pinia = createPinia()
+const app = createApp(App)
+
+app.use(pinia)
+app.mount('#app')
+```
+
+## 创建第一个 Store
+
+在 **`src/stores`** 目录下创建一个 global.ts 文件，定义一个全局 Store：
 
 ```ts
 import { defineStore } from 'pinia';
 
-interface UserProps {
-  name: string;
-  age: number;
-}
 
 interface State {
-  appID: string;
   count: number;
-  userList: UserProps[];
+  version: string;
+  users: Array<{ name: string, age: number }>;
 }
 
-export const useAppStore = defineStore('appStore', {
+export const useGlobalStore = defineStore('globalStore', {
   state: (): State => ({
-    appID: 'wx9d0f652e42541e26',
-    count: 0,
-    userList: [],
+    version: 'v1.0.0',
+    count: 1,
+    users: [],
   }),
   getters: {
     double: (state) => state.count * 2,
@@ -58,32 +75,20 @@ export const useAppStore = defineStore('appStore', {
 });
 ```
 
-## 导入Store
-
-**`main.ts`**
-
-```ts
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import { useAppStore } from './stores';
-import App from './App.vue';
-
-const app = createApp(App);
-app.use(createPinia());
-app.mount('#app');
-```
-
-## 访问Store
+## 在组件中使用 Store
 
 ```vue
 <script setup lang="ts">
-import { useAppStore } from './stores';
-const store = useAppStore();
+import { useGlobalStore } from "./stores/global";
+const globalStore = useGlobalStore();
 </script>
 
 <template>
-  <button @click="store.increment()">{{ store.count }}</button>
+  <div>{{ globalStore.count }}</div>
+  <div>{{ globalStore.doublePlusOne }}</div>
 </template>
+
+<style scoped></style>
 ```
 
 # 拓展
@@ -119,6 +124,6 @@ window.addEventListener('beforeunload', () => {
 ### 插件持久化
 
 ```shell
-$ npm i pinia-plugin-persist
+$ pnpm add pinia-plugin-persist
 ```
 

@@ -1,6 +1,6 @@
 # 概述
 
-[Vuex >>](https://next.vuex.vuejs.org/zh/index.html) 是一个专为 Vue.js 应用程序开发的 **状态管理模式 + 库**。它采用 **集中式** 存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+[Vuex >>](https://next.vuex.vuejs.org/zh/index.html) 是一个专为 Vue.js 应用程序设计的状态管理模式和库。它通过集中式存储管理应用的所有组件的状态，并确保状态以一种可预测的方式发生变化。
 
 ## 什么是状态管理?
 
@@ -8,14 +8,16 @@
 
 ```vue
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive } from "vue";
 
+// -- 状态
 const state = reactive({
-  count: 0 /** 状态 */,
+  count: 0,
 });
 
+// -- 操作
 const increment = () => {
-  state.count++; /** 操作 */
+  state.count++; 
 };
 </script>
 
@@ -31,7 +33,7 @@ const increment = () => {
 - **视图**，以声明方式将 **状态** 映射到视图（模板渲染）；
 - **操作**，响应在 **视图** 上的用户输入导致的状态变化（点击按钮）。
 
-以下是一个表示 “单向数据流” 理念的简单示意：
+以下是一个表示 “**单向数据流**” 理念的简单示意：
 
 ![](./IMGS/flow.png)
 
@@ -44,21 +46,23 @@ const increment = () => {
 
 对于问题二，我们经常会采用父子组件直接引用或者通过事件来变更和同步状态的多份拷贝。
 
-以上的这些模式非常脆弱，通常会导致无法维护的代码。Vuex 的存在，就是为了解决类似问题，Vuex将组件的共享状态抽取出来，以一个全局 **单例模式** 管理，在这种模式下，我们的组件树构成了一个巨大的“视图”，不管在树的哪个位置，任何组件都能获取状态或者触发行为！
+因此，我们为什么不把组件的共享状态抽取出来，以一个全局单例模式管理呢？在这种模式下，我们的组件树构成了一个巨大的“视图”，不管在树的哪个位置，任何组件都能获取状态或者触发行为！
+
+通过定义和隔离状态管理中的各种概念并通过强制规则维持视图和状态间的独立性，我们的代码将会变得更结构化且易维护。
+
+这就是 Vuex 背后的基本思想！
 
 ![](./IMGS/vuex.png)
 
-流程：`View` → `（Dispatch）Action`  → `（Comit）Mutations` → `（Mutate）State` → `View`
+流程：`View` → `（Dispatch）Action`  → `（Commit）Mutations` → `（Mutate）State` → `View`
 
-解读：当用户在视图层进行某种操作需要修改数据时，通过派发（Dispatch）一个 `Action`，然后再 Action 内部提交（Commit）一次 `Mutation`，并在 Mutation 中执行数据更改，最终重渲染到视图上。
+解读：当用户在视图层进行某种操作需要修改数据时，通过派发（Dispatch）一个 `Action`，然后在 Action 内部提交（Commit）一次 `Mutation`，并在 Mutation 中执行数据更改，最终重渲染到视图上。
 
 > 注意：`Action` 不是必需品，如果有异步操做才可能用到 `Action`，否则可以不使用。
 
-## 2. 什么情况下使用 Vuex?
+## 什么情况下使用 Vuex?
 
-Vuex 可以帮助我们管理共享状态，并附带了更多的概念和框架。这需要对短期和长期效益进行权衡。
-
-如果您不打算开发大型单页应用，使用 Vuex 可能是繁琐冗余的。确实是如此——如果您的应用够简单，您最好不要使用 Vuex。一个简单的 store 模式就足够您所需了。但是，如果您需要构建一个中大型单页应用，您很可能会考虑如何更好地在组件外部管理状态，Vuex 将会成为自然而然的选择。引用 Redux 的作者 Dan Abramov 的话说就是：
+Vuex 是 Vue.js 的集中式状态管理工具，适用于管理共享状态和复杂的数据流。对于小型应用，Vuex 可能显得繁琐，简单的 store 模式即可满足需求。但在构建中大型单页应用时，Vuex 能够有效解决组件间状态共享的难题，成为自然而然的选择。正如 Redux 作者 Dan Abramov 所说：
 
 > Flux 架构就像眼镜：您自会知道什么时候需要它。
 
@@ -67,10 +71,8 @@ Vuex 可以帮助我们管理共享状态，并附带了更多的概念和框架
 ## 创建文件
 
 ```shell
-# Windows
-$ mkdir -p src/store; cd > src/store/index.ts
-# macOS
-$ mkdir -p src/store; touch src/store/index.ts
+$ pnpm create vite vuex-tutorials --template vue-ts && cd vuex-tutorials && pnpm install && code .
+$ mkdir -p src/store && touch src/store/index.ts
 ```
 
 > **基本结构**： `src/store/index.ts`
@@ -121,11 +123,11 @@ app.mount('#app');
 
 ## 1. State *
 
-### 1.1. 单一状态树
+### 单一状态树
 
 Vuex 使用 **单一状态树**（单例设计模式），用一个对象就包含了全部的应用层级状态。至此它便作为一个 **唯一数据源** 而存在。这也意味着，每个应用将仅仅包含一个 store 实例。单一状态树让我们能够直接地定位任一特定的状态片段，在调试的过程中也能轻易地取得整个当前应用状态的快照。
 
-### 1.2. 定义状态属性
+### 定义状态属性
 
 我们定义一个状态属性 `count`，如下所示：
 

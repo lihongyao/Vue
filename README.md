@@ -4,7 +4,7 @@
 
 > 提示：
 >
-> 1. 本教程主要基于 Vite 2 + Vue 3 + TypeScript 进行示例演示。如果你对 TypeScript 还不熟悉，建议先阅读 [学习 TypeScript >>](https://gitee.com/lihongyao/TypeScript)。
+> 1. 本教程主要基于 Vite6+ / Vue3+ / TypeScript 进行示例演示。如果你对 TypeScript 还不熟悉，建议先阅读 [学习 TypeScript >>](https://gitee.com/lihongyao/TypeScript)。
 > 2. 你可以点击 [这里 >>](https://github.com/vuejs/core/releases) 了解 Vue 的最新版本更新信息。
 > 3. 建议结合 [官方文档 >>](https://staging-cn.vuejs.org/) 阅读，同时你也可以参考 [互动教程 >>](https://cn.vuejs.org/tutorial/#step-1) 进行实践。
 
@@ -136,7 +136,7 @@ export default defineConfig({
 通过 Vite 构建的项目为我们预生成了一些文件，如下所示：
 
 ```
-vue-examples
+vue-tutorials
 .
 ├── /node_modules
 ├── /public                    
@@ -199,9 +199,9 @@ vue-examples
 
 **说明：**
 
-1. script setup 是 Vue 3 推荐的 **组合式 API** 语法，语法简洁，性能更优。
-2. template 部分定义了组件的 HTML 结构。
-3. style scoped 使该组件的样式仅作用于当前组件，不影响全局。
+1. `<script setup lang="ts">`：脚本，Vue 3 推荐的 **组合式 API** 语法，语法简洁，性能更优。
+2. `<template>`：模板，定义了组件的 HTML 结构。
+3. `<style lang="less" scoped>`：样式，仅作用于当前组件，不影响全局。
 
 ## 应用实例
 
@@ -217,9 +217,9 @@ import './style.css'
 createApp(App).mount('#app')
 ```
 
-1. `createApp(App)` 创建一个 Vue **应用实例**，并将 App.vue 作为 **根组件**。
-2. `mount('#app')` 将 Vue 应用挂载到 index.html 中的 div#app 标签中。
-3. mount 方法返回的是 **根组件实例**，而不是应用实例。
+1. `createApp(App)`：创建一个 Vue **应用实例**，并将 App.vue 作为 **根组件**。
+2. `mount('#app')`：将 Vue 应用挂载到 index.html 中的 `div#app` 标签中。
+3. `mount()`：挂载，该方法返回的是 **根组件实例**，而不是应用实例。
 
 > ⚠️ **注意**：Vite 生成的 index.html 默认包含 `<div id="app"></div>`，所以可以直接使用 #app 进行挂载。
 
@@ -231,7 +231,7 @@ createApp(App).mount('#app')
 $ pnpm dev
 ```
 
-后在浏览器访问：http://localhost:5173/，你将看到页面显示 **“Hello, Vue.js!”** 🎉
+后在浏览器访问：http://localhost:5173/，你将看到页面显示：*Hello, Vue.js!*
 
 > 🚀 **提示**：默认情况下，Vite 的开发服务器运行在 5173 端口。如果该端口被占用，Vite 会自动选择其他端口，你可以在终端查看具体的访问地址。
 
@@ -239,13 +239,21 @@ $ pnpm dev
 
 @See https://cn.vuejs.org/guide/introduction#api-styles
 
-Vue 的组件可以按两种不同的风格书写：**选项式 API** 和 **组合式 API**。
+Vue 提供了两种主要的组件开发风格：**选项式 API (Options API)** 和 **组合式 API (Composition API)**，两者在代码组织和逻辑复用上有显著差异。
 
-本小节主要讲解 组合式API 和 选项式API 的区别，对于介绍中的一些概念可能你不是很了解，不过没有关系，这不是重点，后续章节会重点介绍，在这里，你只需要了解二者的区别和我们最终的取舍即可。 
+> 提示：
+>
+> 本小节主要讲解 组合式API 和 选项式API 的区别，对于介绍中的一些概念可能你不是很了解，不过没有关系，这不是重点，后续章节会重点介绍，在这里，你只需要了解二者的区别和我们最终的取舍即可。 
 
 ## 选项式 API
 
-选项式 API 是 Vue 早期版本的开发方式，基于配置对象 (data、methods、computed、watch 等) 组织组件逻辑。它适合 **简单组件**，逻辑分层清晰，便于初学者快速上手。如下所示：
+**特点：**
+
+- 通过预定义的选项（如 `data`、`methods`、`computed`、`watch` 等）组织组件逻辑。
+- 逻辑分散在不同选项中，适合简单组件或快速开发。
+- 通过 `this` 访问组件实例的属性和方法。
+
+**示例：**
 
 ```vue
 <script lang="ts">
@@ -267,61 +275,20 @@ export default defineComponent({
 
 > 提示：除了上面列出的部分，还包括一些生命周期钩子函数。
 
-它将组件的逻辑分散在不同的选项（如`data`、`methods`、`computed`、`watch`等）中，使得组件的结构相对简单易懂。
+**适用场景：**
 
-使用选项式 API，我们可以用包含多个选项的对象来描述组件的逻辑，选项所定义的属性都会暴露在函数内部的 `this` 上，它会指向当前的组件实例。
-
-```vue
-<script>
-export default {
-  // data() 返回的属性将会成为响应式的状态
-  // 并且暴露在 this 上
-  data() {
-    return {
-      count: 0
-    }
-  },
-
-  // methods 是一些用来更改状态与触发更新的函数
-  // 它们可以在模板中作为事件处理器绑定
-  methods: {
-    increment() {
-      this.count++
-    }
-  },
-
-  // 生命周期钩子会在组件生命周期的各个不同阶段被调用
-  // 例如这个函数就会在组件挂载完成后被调用
-  mounted() {
-    console.log(`The initial count is ${this.count}.`)
-  }
-}
-</script>
-
-<template>
-  <button @click="increment">Count is: {{ count }}</button>
-</template>
-```
-
-选项式 API 在小型、简单的组件中易于上手和理解，但当组件变得更大、更复杂时，存在以下问题：
-
-- **代码逻辑被拆分**：实现一个功能时，其逻辑会被分散到 data、methods、computed、watch 等不同的选项中，不利于维护。
-- **逻辑关注点分散**：组件复杂度增加后，同一个功能的代码分布在多个部分，使得阅读和修改变得困难。
-- **降低可读性**：对于未编写该组件的开发者来说，理解组件的逻辑需要在多个选项之间来回跳转，增加了学习成本。
-
-因此，选项式 API 更适合编写**小型、简单**的组件，而对于**大型、复杂**的组件，组合式 API 提供了更好的组织方式，使代码结构更清晰、可复用性更强。
+1. 小型项目或初学者入门。
+2. 需要快速原型开发或维护旧版 Vue 项目。
 
 ## 组合式 API
 
-组合式 API 是 Vue 3.0 引入的新特性，旨在 **解决大型、复杂组件的 维护难题**。相比选项式 API，组合式 API 允许使用 [\<script setup>](https://staging-cn.vuejs.org/api/sfc-script-setup.html) 将组件的逻辑**组织在一起**，并通过**自定义组合函数（Composition Function）**封装可复用的逻辑。
+组合式 API 是 Vue 3.0 引入的新特性，其特点如下：
 
-**组合式 API 的优势**
+1. 使用 `setup()` 函数集中管理逻辑，通过 `ref`、`reactive` 等函数创建响应式状态。
+2. 逻辑按功能聚合，支持高度复用（通过自定义 Hook）。
+3. 更好的 TypeScript 支持和类型推断。
 
-1. **逻辑聚合**：相关逻辑可以放在同一作用域内，避免选项式 API 中逻辑分散的问题。
-2. **更高的可复用性**：可以封装成可复用的 composables，便于在多个组件间共享逻辑。
-3. **更强的灵活性**：不依赖 this，可以自由地使用 JavaScript 的特性进行组织。
-
-现在，我们将刚刚的示例以组合式API的形式来实现：
+**示例：**
 
 ```vue
 <script setup>
@@ -346,16 +313,21 @@ onMounted(() => {
 </template>
 ```
 
+**适用场景**：
+
+1. 复杂组件或大型应用。
+2. 需要逻辑复用或 TypeScript 深度集成。
+
 > **⚠️ 注意**：由于 setup 在 beforeCreate 之前执行（也就是说在实例被完全初始化之前执行），因此无法使用 this 访问组件实例的属性和方法。
 
 ## **如何选择？**  
 
-| 选择因素          | 选项式 API 适用场景                           | 组合式 API 适用场景                  |
-| ----------------- | --------------------------------------------- | ------------------------------------ |
-| 项目版本          | 适用于 Vue 2.x 或已有项目，避免大规模迁移成本 | Vue 3.x 新项目，利用最新特性         |
-| 组件复杂度        | 适合简单组件，逻辑分散但易读                  | 适合复杂组件，逻辑可聚合             |
-| 代码复用          | 逻辑难以复用，需 `mixin` 或 `extend`          | 通过 `Composition Function` 轻松复用 |
-| TypeScript 兼容性 | 类型推导有限，TypeScript 适配性一般           | 更好的类型推导，TypeScript 兼容性强  |
+| 选择因素          | 选项式 API 适用场景                           | 组合式 API 适用场景          |
+| ----------------- | --------------------------------------------- | ---------------------------- |
+| 项目版本          | 适用于 Vue 2.x 或已有项目，避免大规模迁移成本 | Vue 3.x 新项目，利用最新特性 |
+| 逻辑组织          | 按选项分散（data/methods 等）                 | 按功能集中（`setup` 函数内） |
+| 代码复用          | 依赖 Mixins（易冲突）                         | 自定义 Hook（灵活复用）      |
+| TypeScript 兼容性 | 需额外类型标注                                | 原生支持良好                 |
 
 **结论**
 
@@ -364,19 +336,6 @@ onMounted(() => {
 3. **团队协作**：如果团队成员熟悉选项式 API，短期内无需强制迁移，但建议逐步过渡到组合式 API。
 
 > 💡**提示**：**后续示例将默认使用 Composition API 进行讲解**，便于掌握更现代的 Vue 3 开发方式。
-
-# Vue2.x vs. Vue3.x
-
-|     对比项      | Vue 2.x                                                      | Vue 3.x                                              |
-| :-------------: | :----------------------------------------------------------- | ---------------------------------------------------- |
-|      性能       | 使用 `Object.defineProperty` 进行响应式数据追踪，性能相对较低 | 使用 `Proxy` 代理对象，响应式系统更高效              |
-|    API 风格     | 选项式 API（Options API）                                    | 组合式 API（Composition API）                        |
-| TypeScript 支持 | 限制较多，类型推导较弱                                       | 更强大的类型推导，与 TypeScript 更兼容               |
-|     包体积      | 体积较大                                                     | 通过模块拆分和优化，体积更小                         |
-|    逻辑复用     | 依赖 `mixin`、`extend`，容易导致命名冲突                     | 通过 `Composition Function` 轻松复用代码             |
-|  Teleport 组件  | 不支持                                                       | 允许组件内容渲染到 DOM 树的不同位置                  |
-|  Fragment 支持  | 需要额外的根标签                                             | 组件可返回多个根元素，无需额外标签                   |
-|   响应式 API    | 依赖 `Vue.observable` 和 `data`                              | 提供 `reactive`、`ref`、`watchEffect` 等更强大的 API |
 
 # 特别说明
 

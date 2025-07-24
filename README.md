@@ -4,9 +4,9 @@
 
 > 提示：
 >
-> 1. 本教程主要基于 Vite6+ / Vue3+ / TypeScript 进行示例演示。如果你对 TypeScript 还不熟悉，建议先阅读 [学习 TypeScript >>](https://gitee.com/lihongyao/TypeScript)。
-> 2. 你可以点击 [这里 >>](https://github.com/vuejs/core/releases) 了解 Vue 的最新版本更新信息。
-> 3. 建议结合 [官方文档 >>](https://staging-cn.vuejs.org/) 阅读，同时你也可以参考 [互动教程 >>](https://cn.vuejs.org/tutorial/#step-1) 进行实践。
+> 1. 本教程主要基于 [Vite7](https://cn.vitejs.dev/) + / Vue3+ / TypeScript 进行示例演示。如果你对 TypeScript 还不熟悉，建议先阅读 [学习 TypeScript ↪](https://gitee.com/lihongyao/TypeScript)。
+> 2. 你可以点击 [这里 ↪](https://github.com/vuejs/core/releases) 了解 Vue 的最新版本更新信息。
+> 3. 建议结合 [官方文档 ↪](https://staging-cn.vuejs.org/) 阅读，同时你也可以参考 [互动教程 ↪](https://cn.vuejs.org/tutorial/#step-1) 进行实践。
 
 # 概述
 
@@ -44,7 +44,7 @@ Vue (发音 /vjuː/，类似 **view**) 是一款用于构建用户界面的渐�
 
 Vite 是一个面向现代浏览器的开发构建工具。它的目标是提供一种快速的开发体验，特别适用于Vue.js单页面应用（SPA）的开发。
 
-接下来，我们一起尝试使用 Vite 来创建项目（[参考 >>](https://cn.vitejs.dev/guide/#scaffolding-your-first-vite-project)）：
+接下来，我们一起尝试使用 Vite 来创建项目（[参考 ↪](https://cn.vitejs.dev/guide/#scaffolding-your-first-vite-project)）：
 
 ```shell
 $ pnpm create vite vue-tutorials --template vue-ts && cd vue-tutorials && pnpm install && code .
@@ -119,13 +119,13 @@ export default defineConfig({
 })
 ```
 
-3. 导入 Tailwind CSS：在您的 CSS 文件（*通常是 src/style.css*）中导入 Tailwind CSS 的内容
+3. 导入 Tailwind CSS：在您的 CSS 文件（*通常是 `src/style.css`*）中导入 Tailwind CSS 的内容
 
 ```js
 @import "tailwindcss";
 ```
 
-> 🔖 **提示**：如果你使用 PostCSS，请参考 [这里 >>](https://tailwindcss.com/docs/installation/using-postcss)
+> 🔖 **提示**：如果你使用 PostCSS，请参考 [这里 ↪](https://tailwindcss.com/docs/installation/using-postcss)
 
 > 📢 **注意**：后续示例构建项目，都将采用此方式来创建。
 >
@@ -181,7 +181,7 @@ vue-examples
 
 在创建应用实例时，我们需要传入一个 **根组件**（App.vue）作为应用的入口，所有其他组件都会作为它的 **子组件**。
 
-在 Vue 中，推荐使用 **单文件组件**（Single-File Components，简称 **SFC**，即 *.vue 文件）。SFC 将 **模板**、**脚本** 和 **样式** 组织在同一个文件中，使组件更易于管理和复用。
+在 Vue 中，推荐使用 **单文件组件**（Single-File Components，简称 **SFC**，即 `*.vue` 文件）。SFC 将 **模板**、**脚本** 和 **样式** 组织在同一个文件中，使组件更易于管理和复用。
 
 **创建 App.vue**
 
